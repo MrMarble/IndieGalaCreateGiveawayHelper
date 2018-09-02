@@ -38,9 +38,13 @@
     jQuery('div[id^="serial_"]').each((i, element) => {
       jQuery(element).append('<div class="entry-elem align-c create-giveaway-helper"><i aria-hidden="true" class="fa fa-gift"></i></div>');
       let game_url = jQuery(element).parent('.game-key-string').find('a.game-steam-url').attr('href');
-      let serial = jQuery(element).find('input[id^=serial_n_]').val();
+      let game_serial = jQuery(element).find('input[id^=serial_n_]').val();
     });
-
+    jQuery('.create-giveaway-helper').on('click', function() {
+      let w = window.open('https://www.indiegala.com/profile','_blank','top=10,height=500,menubar=0,status=0,toolbar=0');
+      w.game_url = game_url;
+      w.game_serial = game_serial;
+    });
   }
 
   function fillGiveaway(searchParams) {
