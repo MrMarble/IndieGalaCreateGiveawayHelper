@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IndieGala Create Giveaway Helper
 // @namespace    https://github.com/MrMarble/IndieGalaCreateGiveawayHelper
-// @version      0.3
+// @version      0.4
 // @description  Creating a giveaway is now  a lot easier!!
 // @author       MrMarble
 // @updateURL    https://github.com/MrMarble/IndieGalaCreateGiveawayHelper/raw/master/IndieGalaCreateGiveawayHelper.user.js
@@ -10,14 +10,11 @@
 // @match        https://www.indiegala.com/gift?gift_id=*
 // @require      https://raw.githubusercontent.com/MrMarble/IndieGalaCreateGiveawayHelper/master/waitForKeyElements.js
 // @require      https://code.jquery.com/jquery-3.3.1.min.js
-// @grant        GM_addStyle
-// @grant        GM_getResourceText
-// @resource     style https://raw.githubusercontent.com/MrMarble/IndieGalaCreateGiveawayHelper/master/style.css
+// @grant        none
 // ==/UserScript==
 
 (function() {
   'use strict';
-  $.noConflict();
   run();
 
   function run() {
@@ -29,16 +26,17 @@
     if (searchParams.has('user_id')) {
       fillGiveaway();
     } else if (searchParams.has('gift_id')) {
-      GM_addStyle(GM_getResourceText('style'));
+      add_style();
       waitForKeyElements("#steam-key-games", addButton, true);
     }
   }
 
   function addButton() {
     jQuery('div[id^="serial_"]').each((i, element) => {
-      let game_url = jQuery(element).parent('.game-key-string').find('a.game-steam-url').attr('href');
+      let game_url = jQuery(element).parents('.game-key-string').find('a.game-steam-url').attr('href');
       let game_serial = jQuery(element).find('input[id^=serial_n_]').val();
-      jQuery(element).append('<div class="entry-elem align-c create-giveaway-helper"><i aria-hidden="true" class="fa fa-gift"></i></div>').on('click', function() {
+      jQuery(element).append('<div class="entry-elem align-c create-giveaway-helper"><i aria-hidden="true" class="fa fa-gift"></i></div>');
+      jQuery('.create-giveaway-helper:last-child').on('click', function() {
         let w = window.open('https://www.indiegala.com/profile', '_blank', 'top=10,height=500,menubar=0,status=0,toolbar=0');
         w.opener = null;
         w.game_url = game_url;
@@ -48,8 +46,39 @@
   }
 
   function fillGiveaway() {
-    if (window.game_url !== undefined) {
-      console.log(window.game_url);
+    jQuery(document).ready(function() {
+      if (window.game_url !== undefined && window.game_serial !== undefined) {
+        jQuery('.giveaways-new-cont').slideToggle();
+        jQuery('#collapseGiveaways').toggleClass('in').css('height', 'auto');
+
+        jQuery('textarea.giveaway-description').val('IndieGala Giveaway');
+        jQuery('.form-not-guaranteed input').val(window.game_url);
+        jQuery('.form-not-guaranteed button.form-button-1').trigger('click');
+        waitForKeyElements('ul.form-not-guaranteed input[rel="steamSerialKey"]', function() {
+          jQuery('ul.form-not-guaranteed input[rel="steamSerialKey"]').val(window.game_serial);
+          jQuery('button.btn-add-rel-game').trigger('click');
+          waitForKeyElements('span.points-result', function() {
+            jQuery('button.btn-calculate-giv-value').trigger('click');
+          }, true);
+        }, true);
+      }
+    });
+  }
+
+  function add_style() {
+    let css = `div.create-giveaway-helper {
+      position: absolute;
+      height: 24px;
+      top: 1px;
+      line-height: 10px;
+      padding: 4px 10px;
+      margin-left: 1px;
+      color: #8c2222;
     }
+    div.create-giveaway-helper:hover{
+      cursor: pointer;
+    }
+    `;
+    jQuery('head').append('<style>' + css + '</style>');
   }
 })();
