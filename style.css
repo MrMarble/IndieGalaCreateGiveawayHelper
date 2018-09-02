@@ -7,3 +7,6 @@ div.create-giveaway-helper {
   margin-left: 1px;
   color: #8c2222;
 }
+div.create-giveaway-helper:hover{
+  cursor: pointer;
+}

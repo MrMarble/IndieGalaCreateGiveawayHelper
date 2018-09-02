@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IndieGala Create Giveaway Helper
 // @namespace    https://github.com/MrMarble/IndieGalaCreateGiveawayHelper
-// @version      0.2
+// @version      0.3
 // @description  Creating a giveaway is now  a lot easier!!
 // @author       MrMarble
 // @updateURL    https://github.com/MrMarble/IndieGalaCreateGiveawayHelper/raw/master/IndieGalaCreateGiveawayHelper.user.js
@@ -27,7 +27,7 @@
 
     let searchParams = new URLSearchParams(window.location.search);
     if (searchParams.has('user_id')) {
-      fillGiveaway(searchParams);
+      fillGiveaway();
     } else if (searchParams.has('gift_id')) {
       GM_addStyle(GM_getResourceText('style'));
       waitForKeyElements("#steam-key-games", addButton, true);
@@ -36,18 +36,20 @@
 
   function addButton() {
     jQuery('div[id^="serial_"]').each((i, element) => {
-      jQuery(element).append('<div class="entry-elem align-c create-giveaway-helper"><i aria-hidden="true" class="fa fa-gift"></i></div>');
       let game_url = jQuery(element).parent('.game-key-string').find('a.game-steam-url').attr('href');
       let game_serial = jQuery(element).find('input[id^=serial_n_]').val();
-    });
-    jQuery('.create-giveaway-helper').on('click', function() {
-      let w = window.open('https://www.indiegala.com/profile','_blank','top=10,height=500,menubar=0,status=0,toolbar=0');
-      w.game_url = game_url;
-      w.game_serial = game_serial;
+      jQuery(element).append('<div class="entry-elem align-c create-giveaway-helper"><i aria-hidden="true" class="fa fa-gift"></i></div>').on('click', function() {
+        let w = window.open('https://www.indiegala.com/profile', '_blank', 'top=10,height=500,menubar=0,status=0,toolbar=0');
+        w.opener = null;
+        w.game_url = game_url;
+        w.game_serial = game_serial;
+      });
     });
   }
 
-  function fillGiveaway(searchParams) {
-    //TODO Create this function
+  function fillGiveaway() {
+    if (window.game_url !== undefined) {
+      console.log(window.game_url);
+    }
   }
 })();
