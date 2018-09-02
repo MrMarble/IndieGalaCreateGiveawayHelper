@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IndieGala Create Giveaway Helper
 // @namespace    https://github.com/MrMarble/IndieGalaCreateGiveawayHelper
-// @version      0.5
+// @version      0.5.1
 // @description  Creating a giveaway is now  a lot easier!!
 // @author       MrMarble
 // @updateURL    https://github.com/MrMarble/IndieGalaCreateGiveawayHelper/raw/master/IndieGalaCreateGiveawayHelper.user.js
@@ -26,12 +26,12 @@
     if (searchParams.has('user_id')) {
       fillGiveaway();
     } else if (searchParams.has('gift_id')) {
-      add_style();
       waitForKeyElements("#steam-key-games", addButton, true);
     }
   }
 
   function addButton() {
+    add_style();
     jQuery('div[id^="serial_"]').each((i, element) => {
       jQuery(element).append('<div class="entry-elem align-c create-giveaway-helper"><i aria-hidden="true" class="fa fa-gift"></i></div>');
     });
@@ -80,6 +80,9 @@
       cursor: pointer;
     }
     `;
+    if (jQuery('.donate_indiegala_helper').length == 0) {
+      css += ' .span-key {position: relative;}div.create-giveaway-helper {right:1px}'
+    }
     jQuery('head').append('<style>' + css + '</style>');
   }
 })();
