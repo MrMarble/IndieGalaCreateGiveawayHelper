@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IndieGala Create Giveaway Helper
 // @namespace    https://github.com/MrMarble/IndieGalaCreateGiveawayHelper
-// @version      0.4
+// @version      0.5
 // @description  Creating a giveaway is now  a lot easier!!
 // @author       MrMarble
 // @updateURL    https://github.com/MrMarble/IndieGalaCreateGiveawayHelper/raw/master/IndieGalaCreateGiveawayHelper.user.js
@@ -33,15 +33,16 @@
 
   function addButton() {
     jQuery('div[id^="serial_"]').each((i, element) => {
-      let game_url = jQuery(element).parents('.game-key-string').find('a.game-steam-url').attr('href');
-      let game_serial = jQuery(element).find('input[id^=serial_n_]').val();
       jQuery(element).append('<div class="entry-elem align-c create-giveaway-helper"><i aria-hidden="true" class="fa fa-gift"></i></div>');
-      jQuery('.create-giveaway-helper:last-child').on('click', function() {
-        let w = window.open('https://www.indiegala.com/profile', '_blank', 'top=10,height=500,menubar=0,status=0,toolbar=0');
-        w.opener = null;
-        w.game_url = game_url;
-        w.game_serial = game_serial;
-      });
+    });
+    jQuery('.create-giveaway-helper').on('click', function() {
+      let game_url = jQuery(this).parents('.game-key-string').find('a.game-steam-url').attr('href');
+      let game_serial = jQuery(this).prevAll('input[id^=serial_n_]').val();
+
+      let w = window.open('https://www.indiegala.com/profile', '_blank', 'top=10,height=500,menubar=0,status=0,toolbar=0');
+      w.opener = null;
+      w.game_url = game_url;
+      w.game_serial = game_serial;
     });
   }
 
