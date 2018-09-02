@@ -4,8 +4,8 @@
 // @version      0.2
 // @description  Creating a giveaway is now  a lot easier!!
 // @author       MrMarble
-// @updateURL    https://raw.githubusercontent.com/MrMarble/IndieGalaCreateGiveawayHelper/master/waitForKeyElements.js
-// @downloadURL  https://raw.githubusercontent.com/MrMarble/IndieGalaCreateGiveawayHelper/master/waitForKeyElements.js
+// @updateURL    https://github.com/MrMarble/IndieGalaCreateGiveawayHelper/raw/master/IndieGalaCreateGiveawayHelper.user.js
+// @downloadURL  https://github.com/MrMarble/IndieGalaCreateGiveawayHelper/raw/master/IndieGalaCreateGiveawayHelper.user.js
 // @match        https://www.indiegala.com/profile?user_id=*
 // @match        https://www.indiegala.com/gift?gift_id=*
 // @require      https://raw.githubusercontent.com/MrMarble/IndieGalaCreateGiveawayHelper/master/waitForKeyElements.js
