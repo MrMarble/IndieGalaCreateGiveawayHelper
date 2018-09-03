@@ -6,6 +6,7 @@
 // @author       MrMarble
 // @updateURL    https://github.com/MrMarble/IndieGalaCreateGiveawayHelper/raw/master/IndieGalaCreateGiveawayHelper.user.js
 // @downloadURL  https://github.com/MrMarble/IndieGalaCreateGiveawayHelper/raw/master/IndieGalaCreateGiveawayHelper.user.js
+// @license MIT
 // @match        https://www.indiegala.com/profile?user_id=*
 // @match        https://www.indiegala.com/gift?gift_id=*
 // @require      https://code.jquery.com/jquery-3.3.1.min.js
