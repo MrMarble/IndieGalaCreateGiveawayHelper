@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IndieGala Create Giveaway Helper
 // @namespace    https://github.com/MrMarble/IndieGalaCreateGiveawayHelper
-// @version      0.5.1
+// @version      0.6
 // @description  Creating a giveaway is now  a lot easier!!
 // @author       MrMarble
 // @updateURL    https://github.com/MrMarble/IndieGalaCreateGiveawayHelper/raw/master/IndieGalaCreateGiveawayHelper.user.js
