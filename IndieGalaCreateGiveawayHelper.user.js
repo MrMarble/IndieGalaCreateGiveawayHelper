@@ -8,7 +8,6 @@
 // @downloadURL  https://github.com/MrMarble/IndieGalaCreateGiveawayHelper/raw/master/IndieGalaCreateGiveawayHelper.user.js
 // @match        https://www.indiegala.com/profile?user_id=*
 // @match        https://www.indiegala.com/gift?gift_id=*
-// @require      https://raw.githubusercontent.com/MrMarble/IndieGalaCreateGiveawayHelper/master/waitForKeyElements.js
 // @require      https://code.jquery.com/jquery-3.3.1.min.js
 // @grant        none
 // ==/UserScript==
@@ -40,7 +39,7 @@
       let game_serial = jQuery(this).prevAll('input[id^=serial_n_]').val();
 
       let w = window.open('https://www.indiegala.com/profile', '_blank', 'top=10,height=500,menubar=0,status=0,toolbar=0');
-      w.opener = null;
+      w.opener = null; //Bypass IndieGala autoclose  of new windows
       w.game_url = game_url;
       w.game_serial = game_serial;
     });
@@ -84,5 +83,58 @@
       css += ' .span-key {position: relative;}div.create-giveaway-helper {right:1px}'
     }
     jQuery('head').append('<style>' + css + '</style>');
+  }
+
+  function waitForKeyElements(selectorTxt, actionFunction, bWaitOnce, iframeSelector) {
+    var targetNodes,
+      btargetsFound;
+
+    if (typeof iframeSelector == "undefined")
+      targetNodes = jQuery(selectorTxt);
+    else
+      targetNodes = jQuery(iframeSelector).contents().find(selectorTxt);
+
+    if (targetNodes && targetNodes.length > 0) {
+      btargetsFound = true;
+      /*--- Found target node(s).  Go through each and act if they
+              are new.
+          */
+      targetNodes.each(function() {
+        var jThis = jQuery(this);
+        var alreadyFound = jThis.data('alreadyFound') || false;
+
+        if (!alreadyFound) {
+          //--- Call the payload function.
+          var cancelFound = actionFunction(jThis);
+          if (cancelFound)
+            btargetsFound = false;
+          else
+            jThis.data('alreadyFound', true);
+          }
+        });
+    } else {
+      btargetsFound = false;
+    }
+
+    //--- Get the timer-control variable for this selector.
+    var controlObj = waitForKeyElements.controlObj || {};
+    var controlKey = selectorTxt.replace(/[^\w]/g, "_");
+    var timeControl = controlObj[controlKey];
+
+    //--- Now set or clear the timer as appropriate.
+    if (btargetsFound && bWaitOnce && timeControl) {
+      //--- The only condition where we need to clear the timer.
+      clearInterval(timeControl);
+      delete controlObj[controlKey]
+    } else {
+      //--- Set a timer, if needed.
+      if (!timeControl) {
+        timeControl = setInterval(function() {
+          waitForKeyElements(selectorTxt, actionFunction, bWaitOnce, iframeSelector);
+        }, 300);
+        controlObj[controlKey] = timeControl;
+      }
+    }
+    waitForKeyElements.controlObj = controlObj;
   }
 })();
